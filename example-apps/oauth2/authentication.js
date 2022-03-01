@@ -2,7 +2,7 @@
 
 const getAccessToken = async (z, bundle) => {
   const response = await z.request({
-    url: 'https://auth-json-server.zapier-staging.com/oauth/access-token',
+    url: 'https://login.microsoft.com',
     method: 'POST',
     body: {
       client_id: process.env.CLIENT_ID,
@@ -30,7 +30,7 @@ const getAccessToken = async (z, bundle) => {
 
 const refreshAccessToken = async (z, bundle) => {
   const response = await z.request({
-    url: 'https://auth-json-server.zapier-staging.com/oauth/refresh-token',
+    url: 'https://login.microsoft.com',
     method: 'POST',
     body: {
       client_id: process.env.CLIENT_ID,
@@ -70,7 +70,7 @@ const includeBearerToken = (request, z, bundle) => {
 // response data for testing purposes. Your connection label can access any data
 // from the returned response using the `json.` prefix. eg: `{{json.username}}`.
 const test = (z, bundle) =>
-  z.request({ url: 'https://auth-json-server.zapier-staging.com/me' });
+  z.request({ url: 'https://login.microsoft.com' });
 
 module.exports = {
   config: {
@@ -79,7 +79,7 @@ module.exports = {
     type: 'oauth2',
     oauth2Config: {
       authorizeUrl: {
-        url: 'https://auth-json-server.zapier-staging.com/oauth/authorize',
+        url: 'https://login.microsoft.com',
         params: {
           client_id: '{{process.env.CLIENT_ID}}',
           state: '{{bundle.inputData.state}}',
