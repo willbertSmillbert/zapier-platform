@@ -2,12 +2,13 @@
 
 const getAccessToken = async (z, bundle) => {
   const response = await z.request({
-    url: 'https://login.microsoft.com',
+    url: `https://login.microsoftonline.com/rapidplatform/oauth2/v2.0/token`,
     method: 'POST',
     body: {
       client_id: process.env.CLIENT_ID,
       client_secret: process.env.CLIENT_SECRET,
       grant_type: 'authorization_code',
+      scope:'cd5db0ec-1419-4ae6-9434-21cfb83fc42d/.default',
       code: bundle.inputData.code,
 
       // Extra data can be pulled from the querystring. For instance:
