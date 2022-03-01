@@ -31,7 +31,7 @@ const getAccessToken = async (z, bundle) => {
 
 const refreshAccessToken = async (z, bundle) => {
   const response = await z.request({
-    url: 'https://login.microsoft.com',
+    url: 'https://login.microsoftonline.com/rapidplatform/oauth2/v2.0/token',
     method: 'POST',
     body: {
       client_id: process.env.CLIENT_ID,
@@ -71,7 +71,7 @@ const includeBearerToken = (request, z, bundle) => {
 // response data for testing purposes. Your connection label can access any data
 // from the returned response using the `json.` prefix. eg: `{{json.username}}`.
 const test = (z, bundle) =>
-  z.request({ url: 'https://login.microsoft.com' });
+  z.request({ url: 'https://login.microsoftonline.com/rapidplatform/oauth2/v2.0/token' });
 
 module.exports = {
   config: {
@@ -80,10 +80,11 @@ module.exports = {
     type: 'oauth2',
     oauth2Config: {
       authorizeUrl: {
-        url: 'https://login.microsoft.com',
+        url: 'https://login.microsoftonline.com/rapidplatform/oauth2/v2.0/token',
         params: {
           client_id: '{{process.env.CLIENT_ID}}',
           state: '{{bundle.inputData.state}}',
+          scope:'cd5db0ec-1419-4ae6-9434-21cfb83fc42d/.default',
           redirect_uri: '{{bundle.inputData.redirect_uri}}',
           response_type: 'code',
         },
