@@ -2,19 +2,22 @@
 
 const getAccessToken = async (z, bundle) => {
   const response = await z.request({
-    url: `https://login.microsoftonline.com/rapidplatform/oauth2/v2.0/token`,
+    url: `https://login.microsoftonline.com/19e1208d-225f-47ac-9c3d-7c6d3e999bab/oauth2/v2.0/token`,
     method: 'POST',
     body: {
-      client_id: process.env.CLIENT_ID,
-      client_secret: process.env.CLIENT_SECRET,
+      client_id: ,
+      client_secret: ,
       grant_type: 'authorization_code',
-      scope:'cd5db0ec-1419-4ae6-9434-21cfb83fc42d/.default',
       code: bundle.inputData.code,
+      scope:'openid profile offline_access' 
+      
 
       // Extra data can be pulled from the querystring. For instance:
       // 'accountDomain': bundle.cleanedRequest.querystring.accountDomain
     },
-    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    headers: { 'content-type': 'application/x-www-form-urlencoded'   
+  }
+    
   });
 
   // If you're using core v9.x or older, you should call response.throwForStatus()
@@ -31,15 +34,19 @@ const getAccessToken = async (z, bundle) => {
 
 const refreshAccessToken = async (z, bundle) => {
   const response = await z.request({
-    url: 'https://login.microsoftonline.com/rapidplatform/oauth2/v2.0/token',
+    url: 'https://login.microsoftonline.com/19e1208d-225f-47ac-9c3d-7c6d3e999bab/oauth2/v2.0/token',
     method: 'POST',
     body: {
-      client_id: process.env.CLIENT_ID,
-      client_secret: process.env.CLIENT_SECRET,
+      client_id: ,
+      client_secret: ,
       grant_type: 'refresh_token',
-      refresh_token: bundle.authData.refresh_token,
+      refresh_token: bundle.authData.refresh_token ,
+      scope:'openid profile offline_access'     
+      
     },
-    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    headers: { 'content-type': 'application/x-www-form-urlencoded',
+  }
+
   });
 
   // If you're using core v9.x or older, you should call response.throwForStatus()
@@ -80,13 +87,14 @@ module.exports = {
     type: 'oauth2',
     oauth2Config: {
       authorizeUrl: {
-        url: 'https://login.microsoftonline.com/rapidplatform/oauth2/v2.0/token',
+        url: 'https://login.microsoftonline.com/19e1208d-225f-47ac-9c3d-7c6d3e999bab/oauth2/v2.0/authorize',
         params: {
-          client_id: '{{process.env.CLIENT_ID}}',
+          client_id: ,
+          //client_id: '{{process.env.CLIENT_ID}}',
           state: '{{bundle.inputData.state}}',
-          scope:'cd5db0ec-1419-4ae6-9434-21cfb83fc42d/.default',
           redirect_uri: '{{bundle.inputData.redirect_uri}}',
           response_type: 'code',
+          scope:'openid profile offline_access'
         },
       },
       getAccessToken,
