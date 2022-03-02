@@ -5,11 +5,13 @@ const getAccessToken = async (z, bundle) => {
     url: `https://login.microsoftonline.com/19e1208d-225f-47ac-9c3d-7c6d3e999bab/oauth2/v2.0/token`,
     method: 'POST',
     body: {
-      client_id: ,
-      client_secret: ,
+      client_id: '{{process.env.CLIENT_ID}}',
+      client_secret: '{{process.env.CLIENT_SECRET}}',
       grant_type: 'authorization_code',
       code: bundle.inputData.code,
-      scope:'openid profile offline_access' 
+      //refresh_token: '{{bundle.inputData.refresh_token}}', 
+      scope:'{{process.env.SCOPE}}',
+      redirect_uri: '{{bundle.inputData.redirect_uri}}'
       
 
       // Extra data can be pulled from the querystring. For instance:
@@ -28,7 +30,7 @@ const getAccessToken = async (z, bundle) => {
   // as well
   return {
     access_token: response.data.access_token,
-    refresh_token: response.data.refresh_token,
+  //  refresh_token: response.data.refresh_token,
   };
 };
 
@@ -37,11 +39,12 @@ const refreshAccessToken = async (z, bundle) => {
     url: 'https://login.microsoftonline.com/19e1208d-225f-47ac-9c3d-7c6d3e999bab/oauth2/v2.0/token',
     method: 'POST',
     body: {
-      client_id: ,
-      client_secret: ,
+      client_id: '{{process.env.CLIENT_ID}}',
+      client_secret: '{{process.env.CLIENT_SECRET}}',
       grant_type: 'refresh_token',
-      refresh_token: bundle.authData.refresh_token ,
-      scope:'openid profile offline_access'     
+     // refresh_token:'{{bundle.inputData.refresh_token}}',
+      scope:'{{process.env.SCOPE}}',
+      redirect_uri: '{{bundle.inputData.redirect_uri}}'     
       
     },
     headers: { 'content-type': 'application/x-www-form-urlencoded',
@@ -58,7 +61,7 @@ const refreshAccessToken = async (z, bundle) => {
   // Zapier
   return {
     access_token: response.data.access_token,
-    refresh_token: response.data.refresh_token,
+   // refresh_token: response.data.refresh_token,
   };
 };
 
@@ -89,17 +92,20 @@ module.exports = {
       authorizeUrl: {
         url: 'https://login.microsoftonline.com/19e1208d-225f-47ac-9c3d-7c6d3e999bab/oauth2/v2.0/authorize',
         params: {
-          client_id: ,
+          //client_id: '{{process.env.CLIENT_ID}}',
+          client_secret:'{{process.env.CLIENT_SECRET}}',
           //client_id: '{{process.env.CLIENT_ID}}',
           state: '{{bundle.inputData.state}}',
           redirect_uri: '{{bundle.inputData.redirect_uri}}',
+          //redirect_uri: 'https://zapier.com/dashboard/auth/oauth/return/App157091CLIAPI/',
           response_type: 'code',
-          scope:'openid profile offline_access'
+          scope:'{{process.env.SCOPE}}',
+         // refresh_token:'{{bundle.inputData.refresh_token}}'
         },
       },
       getAccessToken,
-      refreshAccessToken,
-      autoRefresh: true,
+     // refreshAccessToken,
+    //  autoRefresh: true,
     },
 
     // Define any input app's auth requires here. The user will be prompted to enter
