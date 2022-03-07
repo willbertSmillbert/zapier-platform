@@ -1,0 +1,82 @@
+const subscribeHook = (z, bundle) => {
+    const data = {
+        callback_url:bundle.targetUrl,
+        enabled:true,
+        trigger:"Action Button",
+        title:"Zap Execution"
+
+    };
+    const options = {
+        //url: `https://${bundle.authData.Environment}.rapidplatform.com/api/${bundle.authData.Tenant}/${bundle.authData.Site}/lists/Webhooks/Items`,
+        url: `https://api-test.rapidplatform.com/api/rapidplatform/finance/lists/Webhooks/All/items`,
+        method: 'POST',
+        headers:{
+            "authorization":'Bearer '+ bundle.authData.oauth_token
+        },
+        body: JSON.stringify(data)
+      };
+      return z.request(options).then(response => z.JSON.parse(response.content));
+ 
+  
+  };
+  const getRecipe = (z, bundle) => {
+    // bundle.cleanedRequest will include the parsed JSON object (if it's not a
+    // test poll) and also a .querystring property with the URL's query string.
+    const recipe = {
+        item:bundle.cleanedRequest.data
+    };
+  
+    return [recipe];
+  };
+  /*
+  const unsubscribeHook = (z, bundle) => {
+    // bundle.subscribeData contains the parsed response JSON from the subscribe
+    // request made initially.
+    const hookId = bundle.subscribeData.id;
+  
+    // You can build requests and our client will helpfully inject all the variables
+    // you need to complete. You can also register middleware to control this.
+    const options = {
+      url: `https://57b20fb546b57d1100a3c405.mockapi.io/api/hooks/${hookId}`,
+      method: 'DELETE',
+    };
+  
+    // You may return a promise or a normal data structure from any perform method.
+    return z.request(options).then((response) => response.data);
+  };*/  
+  
+  // We recommend writing your triggers separate like this and rolling them
+  // into the App definition at the end.
+  module.exports = {
+    key: 'trigger',
+  
+    // You'll want to provide some helpful display labels and descriptions
+    // for users. Zapier will put them into the UX.
+    noun: 'trigger',
+    display: {
+      label: 'Signal Event',
+      description: 'Trigger when a webhook event is fired from your RAPID site',
+    },
+  
+    // `operation` is where the business logic goes.
+    operation: {
+      // `inputFields` can define the fields a user could provide,
+      // we'll pass them in as `bundle.inputData` later.
+
+      type: 'hook',
+  
+      performSubscribe: subscribeHook,
+      perform:getRecipe,
+  
+      // In cases where Zapier needs to show an example record to the user, but we are unable to get a live example
+      // from the API, Zapier will fallback to this hard-coded sample. It should reflect the data structure of
+      // returned records, and have obviously dummy values that we can show to any user.
+  
+      // If the resource can have fields that are custom on a per-user basis, define a function to fetch the custom
+      // field definitions. The result will be used to augment the sample.
+      // outputFields: () => { return []; }
+      // Alternatively, a static field definition should be provided, to specify labels for the fields
+
+    },
+  };
+  

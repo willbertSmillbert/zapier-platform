@@ -110,7 +110,9 @@ module.exports = {
 
     // Define any input app's auth requires here. The user will be prompted to enter
     // this info when they connect their account.
-    fields: [],
+    fields: [{key:'Tenant', type:'string'},
+    {key:'Site', type:'string'},
+  {key:'Environment', type:'string', helpText:'Are you connecting to the production or development database?', choices:{'api-test':'development',production:'prod'}}],
 
     // The test method allows Zapier to verify that the credentials a user provides
     // are valid. We'll execute this method whenever a user connects their account for
